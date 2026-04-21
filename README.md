@@ -41,3 +41,17 @@ This project is configured out-of-the-box for **Vercel**. It includes a `vercel.
 - **Styling:** Custom CSS (Glassmorphism, High-end CSS Variables, Micro-animations)
 - **Icons:** Lucide React
 - **Routing:** React Router DOM
+
+---
+
+## 🚧 Pending Requirements / Roadmap
+
+To evolve this from a static frontend interface into a fully fledged, production-ready application, the following backend/infrastructure requirements are pending:
+
+1. **Cloud Database (Free Tier):**
+   - Currently, notes are stored transiently in React's local state and will be lost on page reload.
+   - **Requirement:** Integrate a free-tier NoSQL database (like **Firebase Firestore** or **Supabase**) to permanently store, fetch, and persist guest notes to the cloud.
+
+2. **Admin Authentication Gateway:**
+   - **Requirement:** Add a fun, basic login gateway to the `/admin` page.
+   - **Implementation:** The username will physically auto-populate as `dililo` with a required secret password (`milosnipsnip`) to unlock the read-mode. Since this is a simple, shared-secret access gate for the couple, this password can simply be hardcoded as an underlying Environment Variable (e.g., in Vercel) rather than requiring complex Firebase Auth user tables.
