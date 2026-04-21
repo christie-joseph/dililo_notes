@@ -10,9 +10,19 @@ const Favs = () => {
   return (
     <div className="page-container compositional-content">
       <header style={{ marginTop: '2rem', marginBottom: '1rem' }}>
-        <h1 className="display-lg" style={{ color: 'var(--tertiary)' }}>Your Favorites & Search</h1>
+        <h1 className="display-lg" style={{ background: 'none', WebkitTextFillColor: 'initial', color: 'var(--on-surface)' }}>
+          Your,<br />
+          <span style={{ 
+            background: 'linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
+            Favorites
+          </span>
+        </h1>
         <p className="body-md" style={{ color: 'var(--on-surface-variant)' }}>
-          Your cherished memories.
+          A collection of your most cherished notes.
         </p>
       </header>
 

@@ -81,6 +81,7 @@ h1, .display-lg {
   font-weight: 500;
   font-style: italic;
   line-height: 1.1;
+  margin-bottom: 0.75rem;
   background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -122,13 +123,13 @@ p, .body-md {
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
-  opacity: 0.15; /* Translucent */
+  /* Opacity is individually managed by inline span styles */
 }
 
 .floating-emoji {
   position: absolute;
   font-size: 3rem;
-  animation: floatUp 15s linear infinite, sway 6s ease-in-out infinite alternate;
+  animation: floatUp 15s linear infinite;
 }
 
 @keyframes floatUp {
@@ -223,7 +224,7 @@ button.tertiary {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  transition: all 0.2s;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .input-well:focus-within {
@@ -244,6 +245,24 @@ button.tertiary {
   font-size: 1rem;
   color: var(--on-surface);
   min-height: 24px;
+  transition: color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-well select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2339382f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right top 50%;
+  background-size: 16px;
+  padding-right: 1.5rem;
+  color: var(--on-surface-variant);
+  font-weight: 500;
+}
+
+.input-well select:focus {
+  color: var(--primary);
 }
 
 .input-well input:focus, .input-well select:focus, .input-well textarea:focus {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 interface DynamicBackgroundProps {
   person: string;
@@ -16,11 +16,14 @@ const DynamicBackground: React.FC<DynamicBackgroundProps> = ({ person }) => {
 
   if (activeEmojis.length === 0) return null;
 
-  // Render 8 staggered floating emojis
-  const spans = Array.from({ length: 8 }).map((_, i) => {
-    const randomLeft = Math.floor(Math.random() * 90) + '%';
-    const randomDelay = Math.floor(Math.random() * 10) + 's';
-    const randomDuration = Math.floor(Math.random() * (20 - 12 + 1) + 12) + 's';
+  // Render 24 scattered floating emojis to fill the space
+  const spans = useMemo(() => Array.from({ length: 24 }).map((_, i) => {
+    const randomLeft = Math.floor(Math.random() * 100) + '%';
+    // Negative delay ensures they are already distributed on screen when loaded
+    const randomDelay = '-' + Math.floor(Math.random() * 25) + 's';
+    const randomDuration = Math.floor(Math.random() * (30 - 15 + 1) + 15) + 's';
+    const randomSize = (Math.random() * 2 + 1.5).toFixed(1) + 'rem';
+    const randomOpacity = (Math.random() * 0.15 + 0.1).toFixed(2);
     const emoji = activeEmojis[i % activeEmojis.length];
 
     return (
@@ -30,13 +33,15 @@ const DynamicBackground: React.FC<DynamicBackgroundProps> = ({ person }) => {
         style={{ 
           left: randomLeft, 
           animationDelay: randomDelay,
-          animationDuration: randomDuration 
+          animationDuration: randomDuration,
+          fontSize: randomSize,
+          opacity: randomOpacity
         }}
       >
         {emoji}
       </span>
     );
-  });
+  }), [person, activeEmojis]);
 
   return (
     <div className="emoji-bg-container">

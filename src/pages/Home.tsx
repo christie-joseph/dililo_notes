@@ -21,9 +21,19 @@ const Home = () => {
   return (
     <div className="page-container compositional-content">
       <header className="home-header">
-        <h1 className="display-lg">DiLiLo - Home</h1>
+        <h1 className="display-lg" style={{ background: 'none', WebkitTextFillColor: 'initial', color: 'var(--on-surface)' }}>
+          Hey,<br />
+          <span style={{ 
+            background: 'linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
+            Newlyweds!
+          </span>
+        </h1>
         <p className="body-md" style={{ color: 'var(--on-surface-variant)' }}>
-          Welcome back to your Keepsakes.
+          Memories, curated just for you guys.
         </p>
       </header>
 
@@ -48,9 +58,11 @@ const Home = () => {
         <div style={{ marginBottom: '1rem' }}>
           <h2 className="title-md">Recent Additions</h2>
         </div>
-        <div className="notes-list">
-          {notes.slice(0, 10).map(n => (
-             <NoteCard key={n.id} note={n} />
+        <div className="notes-list horizontal-scroll">
+          {notes.slice(0, 3).map(n => (
+             <div key={n.id} className="scroll-item">
+               <NoteCard note={n} />
+             </div>
           ))}
           {notes.length === 0 && <p className="body-md">No notes found.</p>}
         </div>
@@ -65,8 +77,9 @@ const Home = () => {
           position: relative;
           border-radius: var(--radius-xl);
           overflow: hidden;
-          height: 240px;
+          height: 33vh;
           box-shadow: 0 12px 32px rgba(57, 56, 47, 0.08);
+          flex-shrink: 0;
         }
         .image-hero img {
           width: 100%;
@@ -97,6 +110,24 @@ const Home = () => {
           display: flex;
           flex-direction: column;
           gap: 1rem;
+        }
+        .notes-list.horizontal-scroll {
+          flex-direction: row;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          padding-bottom: 0.5rem;
+          -webkit-overflow-scrolling: touch;
+          margin-left: -12px;
+          margin-right: -24px;
+          padding-left: 12px;
+          padding-right: 24px;
+        }
+        .notes-list.horizontal-scroll::-webkit-scrollbar {
+          display: none;
+        }
+        .scroll-item {
+          flex: 0 0 85%;
+          scroll-snap-align: center;
         }
       `}</style>
     </div>

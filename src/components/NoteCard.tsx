@@ -27,10 +27,6 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, variant = 'home' }) => {
     }
   };
 
-  const words = note.text.split(' ');
-  const isTruncated = words.length > 8;
-  const previewText = words.slice(0, 8).join(' ') + (isTruncated ? '...' : '');
-
   return (
     <div 
       className="note-card" 
@@ -38,9 +34,9 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, variant = 'home' }) => {
       style={{ cursor: isHome ? 'default' : 'pointer' }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <h2 className={isHome || isExpanded ? "title-md" : "title-sm"}>{note.author}</h2>
-          <span className="label-sm">{isHome || isExpanded ? `To: ${note.toPerson} • ` : ''}{formattedDate}</span>
+        <div style={{ paddingRight: '1rem' }}>
+          <h2 className={isHome || isExpanded ? "title-md" : "title-sm"}>{note.title}</h2>
+          <span className="label-sm">From {note.author} {isHome || isExpanded ? `to ${note.toPerson} • ` : '• '}{formattedDate}</span>
         </div>
         <button 
           style={{ padding: '8px', minWidth: 'unset', minHeight: 'unset', borderRadius: '50%', background: 'transparent' }} 
@@ -53,17 +49,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, variant = 'home' }) => {
         </button>
       </div>
 
-      {!isExpanded && isFavs && (
-        <p className="body-md preview-content" style={{ fontStyle: 'italic', fontSize: '0.875rem', color: 'var(--on-surface-variant)', marginTop: '0.25rem' }}>
-          To my dearest {note.toPerson}
-        </p>
-      )}
 
-      {!isExpanded && isSearch && (
-        <p className="body-md preview-content" style={{ fontSize: '0.875rem', color: 'var(--on-surface-variant)', marginTop: '0.25rem' }}>
-          {previewText} {isTruncated && <span style={{ color: 'var(--primary)', fontWeight: 600 }}>read more</span>}
-        </p>
-      )}
 
       <div className={`note-body-wrapper ${isExpanded ? 'expanded' : ''}`}>
         <div className="note-body-inner">

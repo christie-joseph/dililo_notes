@@ -4,6 +4,7 @@ export type UserRole = 'default' | 'dililo';
 
 export type Note = {
   id: string;
+  title: string;
   author: string;
   text: string;
   fromGroup: string; 
@@ -25,8 +26,8 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // Base mock notes
 const initialNotes: Note[] = [
-  { id: '1', author: 'Mark', text: 'Hope you guys have a wonderful day!', fromGroup: 'Friend', toPerson: 'Divi', isFav: true, createdAt: Date.now() - 100000 },
-  { id: '2', author: 'Mom', text: 'Make sure Milo eats his treat!', fromGroup: 'Family', toPerson: 'Milo 🐱', isFav: false, createdAt: Date.now() - 50000 },
+  { id: '1', title: 'Always in our thoughts', author: 'Mark', text: 'Hope you guys have a wonderful day!', fromGroup: 'Friend', toPerson: 'Divi', isFav: true, createdAt: Date.now() - 100000 },
+  { id: '2', title: 'A friendly reminder', author: 'Mom', text: 'Make sure Milo eats his treat!', fromGroup: 'Family', toPerson: 'Milo 🐱', isFav: false, createdAt: Date.now() - 50000 },
 ];
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {

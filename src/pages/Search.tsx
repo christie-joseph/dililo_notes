@@ -20,7 +20,20 @@ const Search = () => {
   return (
     <div className="page-container compositional-content">
       <header style={{ marginTop: '2rem' }}>
-        <h1 className="display-lg">Your Notes Archive</h1>
+        <h1 className="display-lg" style={{ background: 'none', WebkitTextFillColor: 'initial', color: 'var(--on-surface)' }}>
+          Notes,<br />
+          <span style={{ 
+            background: 'linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
+            Archive
+          </span>
+        </h1>
+        <p className="body-md" style={{ color: 'var(--on-surface-variant)' }}>
+          Explore every memory shared with you.
+        </p>
       </header>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1rem' }}>
