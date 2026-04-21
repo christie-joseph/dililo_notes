@@ -28,7 +28,6 @@ To read the notes, manage favorites, and search through submissions, you must un
 1. Ensure you have Node.js installed.
 2. Run `npm install` to install dependencies.
 3. Run `npm run dev` to start the Vite development server.
-4. Your application will be live at `http://localhost:5173`.
 
 ### Deployment
 This project is configured out-of-the-box for **Vercel**. It includes a `vercel.json` file which configures strict routing rules, explicitly ensuring all URL paths (like `/write` or `/favs`) successfully redirect cleanly through React Router without triggering 404 errors.
