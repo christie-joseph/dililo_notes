@@ -8,16 +8,16 @@ import Favs from './pages/Favs';
 import Search from './pages/Search';
 import ThankYou from './pages/ThankYou';
 
-const RoleToggle = () => {
+const AdminSettings = () => {
   const { role, setRole } = useAppContext();
   return (
-    <button 
-      className="role-toggle" 
-      onClick={() => setRole(role === 'default' ? 'dililo' : 'default')}
-      style={{ position: 'fixed', top: 16, right: 16, zIndex: 100, background: 'var(--surface-container-high)', padding: '8px 16px', borderRadius: '1.5rem', fontWeight: 600, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}
-    >
-      Mode: {role}
-    </button>
+    <div className="page-container compositional-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '1rem' }}>
+      <h1 className="display-lg">Admin</h1>
+      <p className="body-md">Current Role: {role}</p>
+      <button className="primary" onClick={() => setRole('dililo')} style={{ width: '200px' }}>Unlock Reader</button>
+      <button className="secondary" onClick={() => setRole('default')} style={{ width: '200px', background: 'transparent', border: '1px solid var(--outline-variant)' }}>Lock to Writer</button>
+      <a href="/" style={{ marginTop: '2rem', color: 'var(--primary)', fontWeight: 600 }}>Return App</a>
+    </div>
   );
 };
 
@@ -26,7 +26,6 @@ const AppContent = () => {
 
   return (
     <BrowserRouter>
-      <RoleToggle />
       <div className="page-wrapper">
         {role === 'dililo' ? (
           <>
@@ -34,6 +33,7 @@ const AppContent = () => {
               <Route path="/" element={<Home />} />
               <Route path="/favs" element={<Favs />} />
               <Route path="/search" element={<Search />} />
+              <Route path="/admin" element={<AdminSettings />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
             <BottomNav />
@@ -42,6 +42,7 @@ const AppContent = () => {
           <Routes>
             <Route path="/write" element={<Write />} />
             <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/admin" element={<AdminSettings />} />
             <Route path="*" element={<Navigate to="/write" replace />} />
           </Routes>
         )}
