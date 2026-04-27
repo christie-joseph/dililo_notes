@@ -57,17 +57,25 @@ const Write = () => {
   const [toPerson, setToPerson] = useState('Divi');
 
   const [isSending, setIsSending] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !author || !text) return;
-    
+
     setIsSending(true);
-    addNote({ title, author, text, fromGroup, toPerson });
-    
-    setTimeout(() => {
-      navigate('/thank-you');
-    }, 2400);
+    setSubmitError(null);
+
+    try {
+      await addNote({ title, author, text, fromGroup, toPerson });
+      setTimeout(() => {
+        navigate('/thank-you');
+      }, 2400);
+    } catch (err) {
+      console.error('Failed to save note:', err);
+      setIsSending(false);
+      setSubmitError('Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -144,7 +152,13 @@ const Write = () => {
             />
           </div>
 
-          <button type="submit" className="primary" style={{ marginTop: '1rem', width: '100%' }}>
+          {submitError && (
+            <p style={{ color: 'var(--error)', fontSize: '0.875rem', textAlign: 'center', margin: 0 }}>
+              {submitError}
+            </p>
+          )}
+
+          <button type="submit" className="primary" style={{ marginTop: '1rem', width: '100%' }} disabled={isSending}>
             {isSending ? 'Sending...' : 'Seal & Send'}
           </button>
         </form>

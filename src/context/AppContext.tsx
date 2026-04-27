@@ -1,4 +1,15 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  doc,
+  serverTimestamp,
+  query,
+  orderBy,
+} from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 export type UserRole = 'default' | 'dililo';
 
@@ -7,34 +18,32 @@ export type Note = {
   title: string;
   author: string;
   text: string;
-  fromGroup: string; 
-  toPerson: string; 
+  fromGroup: string;
+  toPerson: string;
   isFav: boolean;
-  createdAt: number;
+  createdAt: number; // stored as Firestore Timestamp, exposed as ms
 };
 
 interface AppContextType {
   role: UserRole;
   setRole: (role: UserRole) => void;
   notes: Note[];
-  addNote: (note: Omit<Note, 'id' | 'isFav' | 'createdAt'>) => void;
-  toggleFav: (id: string) => void;
-  editNote: (id: string, newText: string) => void;
+  loading: boolean;
+  error: string | null;
+  addNote: (note: Omit<Note, 'id' | 'isFav' | 'createdAt'>) => Promise<void>;
+  toggleFav: (id: string) => Promise<void>;
+  editNote: (id: string, newText: string) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Base mock notes
-const initialNotes: Note[] = [
-  { id: '1', title: 'Always in our thoughts', author: 'Mark', text: 'Hope you guys have a wonderful day!', fromGroup: 'Friend', toPerson: 'Divi', isFav: true, createdAt: Date.now() - 100000 },
-  { id: '2', title: 'A friendly reminder', author: 'Mom', text: 'Make sure Milo eats his treat!', fromGroup: 'Family', toPerson: 'Milo 🐱', isFav: false, createdAt: Date.now() - 50000 },
-];
-
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  // Try to grab role from LocalStorage to persist simple user switch (if running)
   const [role, setRoleState] = useState<UserRole>('default');
-  const [notes, setNotes] = useState<Note[]>(initialNotes);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Restore role from localStorage on mount
   useEffect(() => {
     const savedRole = localStorage.getItem('dililo_role');
     if (savedRole === 'dililo' || savedRole === 'default') {
@@ -42,31 +51,65 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  // Real-time Firestore listener — ordered newest first
+  useEffect(() => {
+    const q = query(collection(db, 'notes'), orderBy('createdAt', 'desc'));
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const fetched: Note[] = snapshot.docs.map((docSnap) => {
+          const data = docSnap.data();
+          return {
+            id: docSnap.id,
+            title: data.title ?? '',
+            author: data.author ?? '',
+            text: data.text ?? '',
+            fromGroup: data.fromGroup ?? '',
+            toPerson: data.toPerson ?? '',
+            isFav: data.isFav ?? false,
+            // Firestore Timestamp → milliseconds for compatibility with existing components
+            createdAt: data.createdAt?.toMillis() ?? Date.now(),
+          };
+        });
+        setNotes(fetched);
+        setLoading(false);
+      },
+      (err) => {
+        console.error('Firestore snapshot error:', err);
+        setError('Could not load notes. Please try again later.');
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
   const setRole = (newRole: UserRole) => {
     localStorage.setItem('dililo_role', newRole);
     setRoleState(newRole);
   };
 
-  const addNote = (notePayload: Omit<Note, 'id' | 'isFav' | 'createdAt'>) => {
-    const newNote: Note = {
+  const addNote = async (notePayload: Omit<Note, 'id' | 'isFav' | 'createdAt'>) => {
+    await addDoc(collection(db, 'notes'), {
       ...notePayload,
-      id: Math.random().toString(36).substr(2, 9),
       isFav: false,
-      createdAt: Date.now(),
-    };
-    setNotes(prev => [newNote, ...prev]);
+      createdAt: serverTimestamp(),
+    });
   };
 
-  const toggleFav = (id: string) => {
-    setNotes(prev => prev.map(n => n.id === id ? { ...n, isFav: !n.isFav } : n));
+  const toggleFav = async (id: string) => {
+    const note = notes.find((n) => n.id === id);
+    if (!note) return;
+    await updateDoc(doc(db, 'notes', id), { isFav: !note.isFav });
   };
 
-  const editNote = (id: string, newText: string) => {
-    setNotes(prev => prev.map(n => n.id === id ? { ...n, text: newText } : n));
+  const editNote = async (id: string, newText: string) => {
+    await updateDoc(doc(db, 'notes', id), { text: newText });
   };
 
   return (
-    <AppContext.Provider value={{ role, setRole, notes, addNote, toggleFav, editNote }}>
+    <AppContext.Provider value={{ role, setRole, notes, loading, error, addNote, toggleFav, editNote }}>
       {children}
     </AppContext.Provider>
   );
