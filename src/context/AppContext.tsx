@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, type ReactNode, useEffect } from 'react';
 import {
   collection,
   onSnapshot,
@@ -8,6 +8,7 @@ import {
   serverTimestamp,
   query,
   orderBy,
+  deleteDoc,
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
@@ -33,6 +34,7 @@ interface AppContextType {
   addNote: (note: Omit<Note, 'id' | 'isFav' | 'createdAt'>) => Promise<void>;
   toggleFav: (id: string) => Promise<void>;
   editNote: (id: string, newText: string) => Promise<void>;
+  deleteNote: (id: string) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -108,8 +110,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     await updateDoc(doc(db, 'notes', id), { text: newText });
   };
 
+  const deleteNote = async (id: string) => {
+    await deleteDoc(doc(db, 'notes', id));
+  };
+
   return (
-    <AppContext.Provider value={{ role, setRole, notes, loading, error, addNote, toggleFav, editNote }}>
+    <AppContext.Provider value={{ role, setRole, notes, loading, error, addNote, toggleFav, editNote, deleteNote }}>
       {children}
     </AppContext.Provider>
   );

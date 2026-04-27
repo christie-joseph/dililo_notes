@@ -47,7 +47,7 @@ const CustomDropdown = ({ options, value, onChange }: { options: string[], value
 };
 
 const Write = () => {
-  const { addNote } = useAppContext();
+  const { addNote, setRole } = useAppContext();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -78,9 +78,44 @@ const Write = () => {
     }
   };
 
+  const handleAdminLogin = () => {
+    const pwd = window.prompt('Enter admin password:');
+    if (pwd === 'miloSnipSnip:(') {
+      setRole('dililo');
+    } else if (pwd !== null) {
+      alert('Incorrect password');
+    }
+  };
+
   return (
     <>
       <DynamicBackground person={toPerson} />
+      
+      <button 
+        onClick={handleAdminLogin}
+        style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '1rem',
+          zIndex: 50,
+          background: 'rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.4)',
+          borderRadius: '20px',
+          padding: '0.5rem 1rem',
+          fontSize: '0.75rem',
+          fontWeight: 600,
+          color: 'var(--on-surface)',
+          cursor: 'pointer',
+          transition: 'background 0.2s',
+        }}
+        onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.4)'}
+        onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+      >
+        You the lucky couple?
+      </button>
+
       <div className="page-container compositional-content" style={{ zIndex: 10, position: 'relative' }}>
         <header style={{ marginTop: '2rem' }}>
           <h1 className="display-lg" style={{ background: 'none', WebkitTextFillColor: 'initial', color: 'var(--on-surface)' }}>

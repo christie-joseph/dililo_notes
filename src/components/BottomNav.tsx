@@ -1,8 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Heart, Search } from 'lucide-react';
+import { Home, Heart, Search, Lock } from 'lucide-react';
+import { useAppContext } from '../context/AppContext';
 
 const BottomNav = () => {
+  const { setRole } = useAppContext();
+
   const getNavClass = ({ isActive }: { isActive: boolean }) => {
     return isActive ? 'nav-item active' : 'nav-item';
   };
@@ -18,6 +21,14 @@ const BottomNav = () => {
       <NavLink to="/favs" className={getNavClass}>
         <Heart size={24} />
       </NavLink>
+      <button 
+        className="nav-item" 
+        onClick={() => setRole('default')}
+        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+        title="Lock Admin Mode"
+      >
+        <Lock size={24} />
+      </button>
       <style>{`
         .nav-item {
           display: flex;
