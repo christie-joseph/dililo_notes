@@ -21,8 +21,38 @@ const AdminSettings = () => {
   );
 };
 
+const LoadingScreen = () => (
+  <div style={{
+    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+    height: '100vh', gap: '1rem', background: 'var(--background)'
+  }}>
+    <div style={{
+      width: '40px', height: '40px', borderRadius: '50%',
+      border: '3px solid var(--outline-variant)',
+      borderTopColor: 'var(--primary)',
+      animation: 'spin 0.8s linear infinite'
+    }} />
+    <p className="body-md" style={{ color: 'var(--on-surface-variant)' }}>Loading notes…</p>
+    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+);
+
+const ErrorScreen = ({ message }: { message: string }) => (
+  <div style={{
+    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+    height: '100vh', gap: '0.5rem', padding: '2rem', background: 'var(--background)'
+  }}>
+    <span style={{ fontSize: '2rem' }}>⚠️</span>
+    <p className="body-md" style={{ color: 'var(--error)', textAlign: 'center' }}>{message}</p>
+  </div>
+);
+
 const AppContent = () => {
-  const { role } = useAppContext();
+  const { role, loading, error } = useAppContext();
+
+  // Show loading/error only for the admin (dililo) reader — guests can always write
+  if (role === 'dililo' && loading) return <LoadingScreen />;
+  if (role === 'dililo' && error) return <ErrorScreen message={error} />;
 
   return (
     <BrowserRouter>
