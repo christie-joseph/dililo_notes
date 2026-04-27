@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import DynamicBackground from '../components/DynamicBackground';
 
@@ -78,12 +79,18 @@ const Write = () => {
     }
   };
 
-  const handleAdminLogin = () => {
-    const pwd = window.prompt('Enter admin password:');
-    if (pwd === 'miloSnipSnip:(') {
+  const [showAdminBubble, setShowAdminBubble] = useState(false);
+  const [adminPwd, setAdminPwd] = useState('');
+  const [showPwd, setShowPwd] = useState(false);
+  const [pwdError, setPwdError] = useState('');
+
+  const submitAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminPwd === 'miloSnipSnip:(') {
       setRole('dililo');
-    } else if (pwd !== null) {
-      alert('Incorrect password');
+      setShowAdminBubble(false);
+    } else {
+      setPwdError('Incorrect password');
     }
   };
 
@@ -92,7 +99,11 @@ const Write = () => {
       <DynamicBackground person={toPerson} />
       
       <button 
-        onClick={handleAdminLogin}
+        onClick={() => {
+          setShowAdminBubble(!showAdminBubble);
+          setPwdError('');
+          setAdminPwd('');
+        }}
         style={{
           position: 'absolute',
           top: '1rem',
@@ -115,6 +126,65 @@ const Write = () => {
       >
         You the lucky couple?
       </button>
+
+      {showAdminBubble && (
+        <div style={{
+          position: 'absolute',
+          top: '3.5rem',
+          right: '1rem',
+          zIndex: 51,
+          background: 'rgba(255, 251, 255, 0.8)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          border: '1px solid rgba(255, 255, 255, 0.6)',
+          borderRadius: 'var(--radius-xl)',
+          padding: '1rem',
+          boxShadow: '0 12px 40px rgba(57, 56, 47, 0.12)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          minWidth: '220px',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--on-surface-variant)' }}>Admin Access</span>
+            <button 
+              onClick={() => setShowAdminBubble(false)} 
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, minWidth: 'unset', minHeight: 'unset' }}
+            >
+              <X size={16} color="var(--on-surface-variant)" />
+            </button>
+          </div>
+          <form onSubmit={submitAdminLogin} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div style={{ 
+              display: 'flex', alignItems: 'center', background: 'var(--surface-container-high)', 
+              borderRadius: '12px', padding: '0.5rem', transition: 'all 0.3s'
+            }}>
+              <input 
+                type={showPwd ? "text" : "password"} 
+                value={adminPwd}
+                onChange={(e) => setAdminPwd(e.target.value)}
+                placeholder="Password"
+                style={{ 
+                  border: 'none', background: 'transparent', flex: 1, 
+                  outline: 'none', color: 'var(--on-surface)', fontSize: '0.875rem' 
+                }}
+                autoFocus
+              />
+              <button 
+                type="button"
+                onClick={() => setShowPwd(!showPwd)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 0.25rem', minWidth: 'unset', minHeight: 'unset' }}
+              >
+                {showPwd ? <EyeOff size={16} color="var(--on-surface-variant)" /> : <Eye size={16} color="var(--on-surface-variant)" />}
+              </button>
+            </div>
+            {pwdError && <span style={{ color: 'var(--error)', fontSize: '0.75rem' }}>{pwdError}</span>}
+            <button type="submit" className="primary" style={{ padding: '0.5rem', minHeight: '32px', borderRadius: '12px', fontSize: '0.875rem' }}>
+              Login
+            </button>
+          </form>
+        </div>
+      )}
 
       <div className="page-container compositional-content" style={{ zIndex: 10, position: 'relative' }}>
         <header style={{ marginTop: '2rem' }}>

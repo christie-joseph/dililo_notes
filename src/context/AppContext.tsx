@@ -111,7 +111,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteNote = async (id: string) => {
-    await deleteDoc(doc(db, 'notes', id));
+    try {
+      await deleteDoc(doc(db, 'notes', id));
+    } catch (err: any) {
+      console.error('Failed to delete note:', err);
+      alert('Failed to delete note. Make sure you have the right permissions in Firebase.');
+    }
   };
 
   return (
