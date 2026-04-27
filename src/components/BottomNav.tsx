@@ -24,7 +24,7 @@ const BottomNav = () => {
       <button 
         className="nav-item" 
         onClick={() => setRole('default')}
-        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
         title="Lock Admin Mode"
       >
         <Lock size={24} />

@@ -220,7 +220,7 @@ const Write = () => {
         .flap-top {
           position: absolute;
           top: 0; left: 0; right: 0;
-          height: 50vh;
+          height: 50%;
           background-color: var(--surface);
           border-bottom: 2px solid var(--outline-variant);
           transform: translateY(-100%);
@@ -229,7 +229,7 @@ const Write = () => {
         .flap-bottom {
           position: absolute;
           bottom: 0; left: 0; right: 0;
-          height: 50vh;
+          height: 50%;
           background-color: var(--surface);
           border-top: 2px solid var(--outline-variant);
           transform: translateY(100%);
