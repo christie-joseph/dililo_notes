@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Trash2 } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import type { Note } from '../context/AppContext';
 
@@ -9,9 +9,7 @@ interface NoteCardProps {
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({ note, variant = 'home' }) => {
-  const { toggleFav, deleteNote } = useAppContext();
-  
-  const enableDelete = true; // Visibility flag for the delete option
+  const { toggleFav } = useAppContext();
   
   const isHome = variant === 'home';
   const isFavs = variant === 'favs';
@@ -41,20 +39,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, variant = 'home' }) => {
           <span className="label-sm">From {note.author} {isHome || isExpanded ? `to ${note.toPerson} • ` : '• '}{formattedDate}</span>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          {enableDelete && (
-            <button 
-              style={{ padding: '8px', minWidth: 'unset', minHeight: 'unset', borderRadius: '50%', background: 'transparent' }} 
-              onClick={(e) => {
-                e.stopPropagation();
-                if (window.confirm('Are you sure you want to delete this note?')) {
-                  deleteNote(note.id);
-                }
-              }}
-              title="Delete Note"
-            >
-              <Trash2 size={20} color="var(--error)" />
-            </button>
-          )}
+
           <button 
             style={{ padding: '8px', minWidth: 'unset', minHeight: 'unset', borderRadius: '50%', background: 'transparent' }} 
             onClick={(e) => {

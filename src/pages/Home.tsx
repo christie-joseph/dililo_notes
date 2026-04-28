@@ -4,19 +4,13 @@ import { ChevronRight } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import NoteCard from '../components/NoteCard';
 
-const placeHolderImages = [
-  'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=600',
-  'https://images.unsplash.com/photo-1502444330042-d1a1ddf9bb5b?auto=format&fit=crop&q=80&w=600',
-  'https://images.unsplash.com/photo-1510137600163-2729bc6959a6?auto=format&fit=crop&q=80&w=600'
-];
+import image1 from '../assets/image_1.png';
 
 const Home = () => {
   const { notes } = useAppContext();
   const navigate = useNavigate();
 
-  const randomImg = useMemo(() => {
-    return placeHolderImages[Math.floor(Math.random() * placeHolderImages.length)];
-  }, []);
+
 
   return (
     <div className="page-container compositional-content">
@@ -38,10 +32,7 @@ const Home = () => {
       </header>
 
       <section className="image-hero">
-        <img src={randomImg} alt="Daily inspiration" />
-        <div className="image-overlay">
-          <span className="label-sm" style={{ color: 'white' }}>Picture Frame Placeholder</span>
-        </div>
+        <img src={image1} alt="Daily inspiration" />
       </section>
 
       <section className="favorites-preview" onClick={() => navigate('/favs')}>
@@ -77,22 +68,13 @@ const Home = () => {
           position: relative;
           border-radius: var(--radius-xl);
           overflow: hidden;
-          height: 33vh;
           box-shadow: 0 12px 32px rgba(57, 56, 47, 0.08);
           flex-shrink: 0;
         }
         .image-hero img {
           width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .image-overlay {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          padding: 1.5rem;
-          background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+          height: auto;
+          display: block;
         }
         .favorites-preview {
           cursor: pointer;

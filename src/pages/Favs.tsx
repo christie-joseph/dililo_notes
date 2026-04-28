@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
 import NoteCard from '../components/NoteCard';
+import image2 from '../assets/image_2.png';
 
 const Favs = () => {
   const { notes } = useAppContext();
@@ -26,6 +27,10 @@ const Favs = () => {
         </p>
       </header>
 
+      <section className="image-hero" style={{ marginBottom: '1.5rem' }}>
+        <img src={image2} alt="Favorites inspiration" />
+      </section>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {favNotes.map(n => (
           <NoteCard key={n.id} note={n} variant="favs" />
@@ -36,6 +41,21 @@ const Favs = () => {
           </p>
         )}
       </div>
+
+      <style>{`
+        .image-hero {
+          position: relative;
+          border-radius: var(--radius-xl);
+          overflow: hidden;
+          box-shadow: 0 12px 32px rgba(57, 56, 47, 0.08);
+          flex-shrink: 0;
+        }
+        .image-hero img {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+      `}</style>
     </div>
   );
 };
